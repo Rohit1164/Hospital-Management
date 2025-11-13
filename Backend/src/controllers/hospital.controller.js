@@ -1,32 +1,5 @@
-// import { Hospital } from "../models/hospital.models.js";
-
-// const loginhospital = async (req, res) => {
-//   const { name, addressLine1, addressLine2, city, pincode, specializedIn } =
-//     req.body;
-
-//   if (!name || !addressLine1 || addressLine2 || !city || pincode) {
-//     console.log("All field are required");
-//   }
-
-//   const hospital = await Hospital.create({
-//     name,
-//     addressLine1,
-//     addressLine2,
-//     city,
-//     pincode,
-//     specializedIn,
-//   });
-//   console.log(hospital);
-//   return res.status(201).json({
-//     message: "admin login successfully",
-//     hospital,
-//   });
-// };
-// export { loginhospital };
-
 import { Hospital } from "../models/hospital.models.js";
 
-// Create Hospital
 export const createHospital = async (req, res) => {
   try {
     const hospital = await Hospital.create(req.body);
@@ -36,7 +9,6 @@ export const createHospital = async (req, res) => {
   }
 };
 
-// Get All Hospitals
 export const getHospitals = async (req, res) => {
   try {
     const hospitals = await Hospital.find();
@@ -46,7 +18,6 @@ export const getHospitals = async (req, res) => {
   }
 };
 
-// Get Single Hospital by ID
 export const getHospitalById = async (req, res) => {
   try {
     const hospital = await Hospital.findById(req.params.id);
@@ -58,7 +29,6 @@ export const getHospitalById = async (req, res) => {
   }
 };
 
-// Update Hospital
 export const updateHospital = async (req, res) => {
   try {
     const hospital = await Hospital.findByIdAndUpdate(req.params.id, req.body, {
@@ -72,7 +42,6 @@ export const updateHospital = async (req, res) => {
   }
 };
 
-// Delete Hospital
 export const deleteHospital = async (req, res) => {
   try {
     const hospital = await Hospital.findByIdAndDelete(req.params.id);

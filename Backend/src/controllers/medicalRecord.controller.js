@@ -1,55 +1,52 @@
-import { MedicalRecord } from "../models/MedicalRecord.js";
+import { MedicalRecord } from "../models/medical_record.models.js";
 
-// Create Medical Record (Doctor Only)
 export const createRecord = async (req, res) => {
   try {
+    console.log("Incoming create request:", req.body);
+
     const record = await MedicalRecord.create({
       ...req.body,
-      doctor: req.user.id, // logged-in doctor
+      doctor: req.body.doctor || "6732abcde1234567890abcd", // temp fix if req.user.id not used
     });
 
-    res.status(201).json({ msg: "Record created", record });
+    return res.status(201).json({ msg: "Record created", record });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    console.error("Error creating record:", err);
+    return res.status(500).json({ msg: err.message });
   }
 };
 
-// Get all Records (Admin/Doctor)
 export const getAllRecords = async (req, res) => {
   try {
-    const records = await MedicalRecord.find()
-      .populate("doctor", "name specialization")
-      .populate("hospital", "name city");
+    const records = await MedicalRecord.find();
 
-    res.json({ records });
+    if (!records || records.length === 0)
+      return res.json({ msg: "No Record Available" });
+
+    return res.json({ records });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    console.error("Error fetching records:", err);
+    return res.status(500).json({ msg: err.message });
   }
 };
 
-// Get Records by patient name
 export const getRecordsByPatient = async (req, res) => {
   try {
     const records = await MedicalRecord.find({
       patientName: req.params.name,
     });
 
-    res.json({ records });
+    return res.json({ records });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    console.error("Error fetching records by patient:", err);
+    return res.status(500).json({ msg: err.message });
   }
 };
 
-// Update Record (Only the doctor who created it)
 export const updateRecord = async (req, res) => {
   try {
     const record = await MedicalRecord.findById(req.params.id);
-
-    if (!record) return res.status(404).json({ msg: "Not found" });
-
-    // Check if logged doctor owns this record
-    if (record.doctor.toString() !== req.user.id)
-      return res.status(403).json({ msg: "Unauthorized" });
+    if (!record) return res.status(404).json({ msg: "Record not found" });
 
     const updated = await MedicalRecord.findByIdAndUpdate(
       req.params.id,
@@ -57,18 +54,19 @@ export const updateRecord = async (req, res) => {
       { new: true }
     );
 
-    res.json({ msg: "Updated", updated });
+    return res.json({ msg: "Updated", updated });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    console.error("Error updating record:", err);
+    return res.status(500).json({ msg: err.message });
   }
 };
 
-// Delete Record (Admin Only)
 export const deleteRecord = async (req, res) => {
   try {
     await MedicalRecord.findByIdAndDelete(req.params.id);
-    res.json({ msg: "Deleted" });
+    return res.json({ msg: "Deleted" });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    console.error("Error deleting record:", err);
+    return res.status(500).json({ msg: err.message });
   }
 };

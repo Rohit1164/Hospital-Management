@@ -38,8 +38,10 @@ export async function loginAdmin(req, res) {
 }
 
 export async function dashboard(req, res) {
+  const admin = await Admin.find({});
   return res.status(200).json({
     success: true,
     message: "Welcome to Admin Dashboard",
+    admin,
   });
 }

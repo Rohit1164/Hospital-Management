@@ -1,6 +1,5 @@
-import { Patient } from "../models/Patient.js";
+import { Patient } from "../models/patient.models.js";
 
-// Create new patient
 export const createPatient = async (req, res) => {
   try {
     const patient = await Patient.create(req.body);
@@ -10,7 +9,6 @@ export const createPatient = async (req, res) => {
   }
 };
 
-// Get all patients
 export const getPatients = async (req, res) => {
   try {
     const patients = await Patient.find().populate("admittedIn");
@@ -20,7 +18,6 @@ export const getPatients = async (req, res) => {
   }
 };
 
-// Get patient by id
 export const getPatientById = async (req, res) => {
   try {
     const patient = await Patient.findById(req.params.id).populate(
@@ -33,7 +30,6 @@ export const getPatientById = async (req, res) => {
   }
 };
 
-// Update patient
 export const updatePatient = async (req, res) => {
   try {
     const patient = await Patient.findByIdAndUpdate(req.params.id, req.body, {
@@ -46,7 +42,6 @@ export const updatePatient = async (req, res) => {
   }
 };
 
-// Delete patient
 export const deletePatient = async (req, res) => {
   try {
     const patient = await Patient.findByIdAndDelete(req.params.id);
