@@ -1,19 +1,32 @@
 import { useTheme } from "../../Context/ThemeProvider.jsx";
-import Table from "../UI/Table.jsx";
+// import Table from "../UI/Table.jsx";
+import { useState, useEffect } from "react";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL_BILL;
 
 export default function Billing() {
   const { darkMode } = useTheme();
 
-  const data = [
-    { id: "b1", patient: "Anita Sharma", amount: "₹2,400", status: "Paid" },
-    { id: "b2", patient: "Rohit Kumar", amount: "₹1,200", status: "Pending" },
-  ];
+  const [addbill, setBill] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const columns = [
-    { key: "patient", title: "Patient" },
-    { key: "amount", title: "Amount" },
-    { key: "status", title: "Status" },
-  ];
+  useEffect(() => {
+    async function loadBill() {
+      try {
+        const res = await fetch(BASE_URL);
+        const json = await res.json();
+
+        // console.log("API: ", json.data);
+        if (json?.data) {
+          setBill(json.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("Pharmacy Error", error.message);
+      }
+    }
+    loadBill();
+  }, []);
 
   return (
     <div
@@ -28,14 +41,48 @@ export default function Billing() {
         Billing
       </h2>
 
-      <div
-        className={`rounded-xl border transition-colors duration-300 ${
-          darkMode
-            ? "border-gray-700 bg-gray-800"
-            : "border-gray-200 bg-gray-50"
-        }`}
-      >
-        <Table columns={columns} data={data} darkMode={darkMode} />
+      {loading && <p className="p-4 text-center text-gray-500">Loading...</p>}
+
+      {/* No Data */}
+      {!loading && addbill.length === 0 && (
+        <p className="p-4 text-center text-gray-500">No Bills</p>
+      )}
+
+      <div className="overflow-x-auto shadow-md rounded-lg">
+        <table
+          className={`min-w-full text-sm ${
+            darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
+          }`}
+        >
+          <thead
+            className={`${darkMode ? "bg-gray-700" : "bg-gray-200"} text-left`}
+          >
+            <tr>
+              <th className="p-3">S.no</th>
+              <th className="p-3">Name</th>
+              <th className="p-3">Amount</th>
+              <th className="p-3">Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {addbill.map((r, index) => (
+              <tr
+                key={r._id}
+                className={`border-b ${
+                  darkMode ? "border-gray-700" : "border-gray-300"
+                }`}
+              >
+                <td className="p-3">{index + 1}</td>
+                <td className="p-3">{r.name}</td>
+                <td className="p-3">{r.amount}</td>
+                <td className="p-3">{r.status}</td>
+
+                {/* And more */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

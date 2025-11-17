@@ -15,17 +15,25 @@ export default function Sidebar({ open = true }) {
   const { darkMode } = useTheme();
   const links = [
     { to: "/", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
-    { to: "/patients", label: "Patients", icon: <Users size={18} /> },
-    { to: "/doctors", label: "Doctors", icon: <Stethoscope size={18} /> },
+    { to: "/dashboard/patients", label: "Patients", icon: <Users size={18} /> },
     {
-      to: "/appointments",
+      to: "/dashboard/doctors",
+      label: "Doctors",
+      icon: <Stethoscope size={18} />,
+    },
+    {
+      to: "/dashboard/appointments",
       label: "Appointments",
       icon: <CalendarDays size={18} />,
     },
-    { to: "/records", label: "Medical Records", icon: <FileText size={18} /> },
-    { to: "/billing", label: "Billing", icon: <Receipt size={18} /> },
-    { to: "/pharmacy", label: "Pharmacy", icon: <Pill size={18} /> },
-    { to: "/labs", label: "Labs", icon: <FlaskConical size={18} /> },
+    {
+      to: "/dashboard/records",
+      label: "Medical Records",
+      icon: <FileText size={18} />,
+    },
+    { to: "/dashboard/billing", label: "Billing", icon: <Receipt size={18} /> },
+    { to: "/dashboard/pharmacy", label: "Pharmacy", icon: <Pill size={18} /> },
+    { to: "/dashboard/labs", label: "Labs", icon: <FlaskConical size={18} /> },
   ];
 
   return (

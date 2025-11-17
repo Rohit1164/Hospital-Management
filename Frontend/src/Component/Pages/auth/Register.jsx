@@ -1,118 +1,103 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Hospital, UserPlus } from "lucide-react";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const BASE_URL = "http://localhost:8001/admin";
 
 export default function Register() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [password, setPassword] = useState("");
+  const [, setMsg] = useState("");
+  const [error, setError] = useState("");
+  const [pic, setPic] = useState("");
 
-  const handleRegister = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
+    setError("");
 
-    // In real app, send data to backend API here
-    alert(`Admin ${form.name} registered successfully!`);
-    navigate("/login");
-  };
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("pic", pic);
+
+    try {
+      const res = await axios.post(`${BASE_URL}/register`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setMsg(res.data.msg);
+      navigate("/login");
+    } catch (err) {
+      setMsg(err.response?.data?.msg || "Error");
+    }
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white shadow-2xl rounded-2xl w-full max-w-md p-8 border border-gray-200">
-        <div className="flex flex-col items-center mb-6">
-          <div className="bg-blue-100 p-3 rounded-full mb-2">
-            <UserPlus size={30} className="text-blue-600" />
-          </div>
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Admin Registration
-          </h2>
-          <p className="text-gray-500 text-sm mt-1">
-            Create your hospital admin account
-          </p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Admin Register
+        </h2>
 
-        <form onSubmit={handleRegister} className="space-y-5">
-          <div>
-            <label className="block text-gray-700 mb-1 text-sm font-medium">
-              Full Name
-            </label>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="John Doe"
-              required
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+        {error && (
+          <p className="text-red-600 text-center mb-3 text-sm">{error}</p>
+        )}
 
-          <div>
-            <label className="block text-gray-700 mb-1 text-sm font-medium">
-              Email
-            </label>
-            <input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="admin@hospital.com"
-              required
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+        <form method="POST" onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="file"
+            className="w-full px-4 py-3 rounded-lg bg-white/70 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            onChange={(e) => setPic(e.target.files[0])}
+            accept="image/*"
+            required
+          />
 
-          <div>
-            <label className="block text-gray-700 mb-1 text-sm font-medium">
-              Password
-            </label>
-            <input
-              type="password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="••••••••"
-              required
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full px-4 py-3 rounded-lg bg-white/70 focus:bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
 
-          <div>
-            <label className="block text-gray-700 mb-1 text-sm font-medium">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              value={form.confirmPassword}
-              onChange={(e) =>
-                setForm({ ...form, confirmPassword: e.target.value })
-              }
-              placeholder="••••••••"
-              required
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="Email Address"
+            className="w-full px-4 py-3 rounded-lg bg-white/70 focus:bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Create Password"
+            className="w-full px-4 py-3 rounded-lg bg-white/70 focus:bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+            className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition-all font-semibold text-lg shadow-md"
           >
-            Register Admin
+            Register
           </button>
         </form>
 
-        <p className="text-center text-gray-600 text-sm mt-5">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-blue-600 font-medium hover:underline"
+        <p className="text-gray-600 text-center mt-4 text-sm">
+          Don't have an account?{" "}
+          <span
+            className="text-blue-600 cursor-pointer hover:underline"
+            onClick={() => navigate("/login")}
           >
             Login
-          </Link>
+          </span>
         </p>
       </div>
     </div>
