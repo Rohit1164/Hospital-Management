@@ -18,12 +18,14 @@ export const createRecord = async (req, res) => {
 
 export const getAllRecords = async (req, res) => {
   try {
-    const records = await MedicalRecord.find();
+    const records = await MedicalRecord.find()
+      .populate("doctor", "name speciality")
+      .populate("hospital", "name address");
 
     if (!records || records.length === 0)
       return res.json({ msg: "No Record Available" });
 
-    return res.json({ records });
+    return res.status(200).json({ records });
   } catch (err) {
     console.error("Error fetching records:", err);
     return res.status(500).json({ msg: err.message });

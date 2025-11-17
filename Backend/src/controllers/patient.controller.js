@@ -51,3 +51,19 @@ export const deletePatient = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
+export const countPatient = async (req, res) => {
+  try {
+    const count = await Patient.countDocuments();
+
+    return res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};

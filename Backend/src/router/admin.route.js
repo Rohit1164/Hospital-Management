@@ -4,10 +4,11 @@ import {
   loginAdmin,
   dashboard,
 } from "../controllers/admin.controller.js";
+import { upload } from "../middleware/multer.middleware.js";
 
 const router = express.Router();
 
-router.post("/register", registerAdmin);
+router.post("/register", upload.single("pic"), registerAdmin);
 
 router.post("/login", loginAdmin);
 

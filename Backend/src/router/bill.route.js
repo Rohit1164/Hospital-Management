@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  countBill,
   createBill,
   deleteBill,
   getBill,
@@ -11,6 +12,7 @@ const router = express.Router();
 
 router.post("/", createBill);
 router.get("/", getBill);
+router.get("/count", countBill);
 router.get("/:id", getBillByID);
 router.put("/:id", UpdateBill);
 router.delete("/:id", deleteBill);

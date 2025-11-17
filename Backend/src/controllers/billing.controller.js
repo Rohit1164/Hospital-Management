@@ -110,3 +110,19 @@ export async function deleteBill(req, res) {
     });
   }
 }
+
+export const countBill = async (req, res) => {
+  try {
+    const count = await Bill.countDocuments();
+
+    return res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};

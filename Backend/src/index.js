@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./DB/index.js";
+import cors from "cors";
 
 import doctorRoutes from "./router/doctor.route.js";
 import hospitalRouter from "./router/hospital.route.js";
@@ -21,6 +22,14 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
+app.use("/uploads", express.static("uploads"));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.get("/", (req, res) => {
   res.redirect("/admin");
@@ -33,7 +42,7 @@ app.use("/medicalRecord", medicalRecordRouter);
 app.use("/patient", patientRouter);
 app.use("/appointment", appointmentRouter);
 app.use("/bill", BillingRouter);
-app.use("/lav", lavRouter);
+app.use("/lab", lavRouter);
 app.use("/pharmacy", pharmacyRouter);
 
 connectDB()

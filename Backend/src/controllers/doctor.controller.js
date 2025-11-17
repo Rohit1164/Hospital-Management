@@ -43,3 +43,19 @@ export async function assignHospital(req, res) {
 
   res.json({ msg: "Hospital assigned", doctor });
 }
+
+export const countDoctor = async (req, res) => {
+  try {
+    const count = await Doctor.countDocuments();
+
+    return res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};

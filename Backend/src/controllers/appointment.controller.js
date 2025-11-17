@@ -30,7 +30,7 @@ export async function createAppointment(req, res) {
 
 export async function getAppointment(req, res) {
   try {
-    const getAppoint = await Appointment.find({});
+    const getAppoint = await Appointment.find({}).populate("doctor", "name");
 
     if (!getAppoint) {
       return res.status(400).json({ message: "No Appointment" });
@@ -51,7 +51,10 @@ export async function getAppointment(req, res) {
 export async function getAppointmentByID(req, res) {
   try {
     const { id } = req.params;
-    const appointment = await Appointment.findById(id);
+    const appointment = await Appointment.findById(id).populate(
+      "doctor",
+      "name"
+    );
 
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
@@ -115,3 +118,19 @@ export async function deleteAppointment(req, res) {
     });
   }
 }
+
+export const countAppointment = async (req, res) => {
+  try {
+    const count = await Appointment.countDocuments();
+
+    return res.status(200).json({
+      success: true,
+      count,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
