@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { useTheme } from "../../Context/ThemeProvider.jsx";
 // import Table from "../UI/Table.jsx";
 import { useState, useEffect } from "react";
@@ -84,6 +85,25 @@ export default function Billing() {
           </tbody>
         </table>
       </div>
+      <button
+        className="
+      flex items-center gap-2 
+      bg-blue-600 hover:bg-blue-700 
+      text-white font-semibold 
+      px-4 py-2 rounded-lg 
+      shadow-md transition-all
+    "
+      >
+        <NavLink
+          key={"/post_data_records"}
+          to={"/dashboard/bills/post_data_bill"}
+        >
+          <span>
+            {/* <Pencil className="w-4 h-4" /> */}
+            Add
+          </span>
+        </NavLink>
+      </button>
     </div>
   );
 }

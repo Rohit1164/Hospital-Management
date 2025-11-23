@@ -1,16 +1,20 @@
 import multer from "multer";
 import path from "path";
-import { fileURLToPath } from "url";
+import fs from "fs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const tempPath = path.join(process.cwd(), "public", "temp");
+
+// Create folder if it doesn't exist
+if (!fs.existsSync(tempPath)) {
+  fs.mkdirSync(tempPath, { recursive: true });
+}
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../uploads")); // ✔ absolute path
+  destination: function (req, file, cb) {
+    cb(null, tempPath); // absolute path → never fails
   },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "_" + file.originalname);
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 

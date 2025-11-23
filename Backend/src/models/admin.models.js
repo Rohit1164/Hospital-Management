@@ -1,18 +1,48 @@
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const adminSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    profilePic: {
-      type: String,
-      // default: "https://avatars.dicebear.com/api/initials/Admin.svg", // default avatar
-    },
+    profilepic: { type: String },
+    refreshToken: { type: String, default: "" },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-const Admin = mongoose.model("Admin", adminSchema);
+adminSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      email: this.email,
+    },
+    process.env.ACCESS_TOKEN_SECRET || "ACCESS_SECRET123",
+    {
+      expiresIn: "1d",
+    }
+  );
+};
 
+adminSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    process.env.REFRESH_TOKEN_SECRET || "REFRESH_SECRET123",
+    {
+      expiresIn: "10d",
+    }
+  );
+};
+
+adminSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+const Admin = mongoose.model("Admin", adminSchema);
 export default Admin;

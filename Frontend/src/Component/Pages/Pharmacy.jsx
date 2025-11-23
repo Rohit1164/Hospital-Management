@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "../../Context/ThemeProvider.jsx";
+import { NavLink } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_PHARMACY;
 
@@ -105,6 +106,22 @@ export default function Pharmacy() {
           </table>
         </div>
       </div>
+      <button
+        className="
+      flex items-center gap-2 
+      bg-blue-600 hover:bg-blue-700 
+      text-white font-semibold 
+      px-4 py-2 rounded-lg 
+      shadow-md transition-all
+    "
+      >
+        <NavLink key={"post_data_pharmacy"} to={"post_data_pharmacy"}>
+          <span>
+            {/* <Pencil className="w-4 h-4" /> */}
+            Add
+          </span>
+        </NavLink>
+      </button>
     </div>
   );
 }

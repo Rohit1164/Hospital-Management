@@ -3,14 +3,14 @@ import Button from "../Pages/Button";
 import { useTheme } from "../../Context/ThemeProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_ADMIN;
 
 export default function Navbar({ onToggleSidebar }) {
   const { darkMode, setDarkMode } = useTheme();
   const [admin, setAdmin] = useState(null);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -19,7 +19,7 @@ export default function Navbar({ onToggleSidebar }) {
 
         // console.log(data.admin[0]);
         // console.log(data.admin[0].name);
-        // console.log(data.admin[0].profilePic);
+        console.log("Image URL", data.admin[0].profilepic);
         setAdmin(data.admin[0]);
       } catch (error) {
         console.log("Admin Error", error.message);
@@ -28,9 +28,17 @@ export default function Navbar({ onToggleSidebar }) {
     fetchData();
   }, []);
 
-  function handleLogout() {
-    console.log(localStorage.removeItem("token"));
-    // navigate("/login");
+  async function handleLogout() {
+    try {
+      const logout = await axios.get(`${BASE_URL}/logout`, {
+        withCredentials: true,
+      });
+      console.log(logout);
+      localStorage.removeItem("token");
+      navigate("/login"); // redirect
+    } catch (error) {
+      console.error("Logout error:", error.response?.data || error.message);
+    }
   }
 
   return (

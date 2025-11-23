@@ -17,6 +17,12 @@ import Register from "./Component/Pages/auth/Register";
 import Sidebar from "./Component/Pages/Sidebar";
 import Navbar from "./Component/Navbar/Header.jsx";
 import { ThemeProvider } from "./Context/ThemeProvider.jsx";
+import AddDoctorForm from "./Component/Pages/Post_Form/Docters_From.jsx";
+import AppointmentForm from "./Component/Pages/Post_Form/AppointmentForm.jsx";
+import MedicalRecordForm from "./Component/Pages/Post_Form/MedicalRecordForm.jsx";
+import BillForm from "./Component/Pages/Post_Form/BillForm.jsx";
+import PharmacyForm from "./Component/Pages/Post_Form/PharmacyForm.jsx";
+import LabForm from "./Component/Pages/Post_Form/LabForm.jsx";
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -58,6 +64,27 @@ export default function App() {
           <Route path="billing" element={<Billing />} />
           <Route path="pharmacy" element={<Pharmacy />} />
           <Route path="labs" element={<Labs />} />
+          <Route
+            path="/dashboard/doctors/post_data_doctor"
+            element={<AddDoctorForm />}
+          />
+          <Route
+            path="/dashboard/appointments/post_data_appointments"
+            element={<AppointmentForm />}
+          />
+          <Route
+            path="/dashboard/records/post_data_records"
+            element={<MedicalRecordForm />}
+          />
+          <Route
+            path="/dashboard/bills/post_data_bill"
+            element={<BillForm />}
+          />
+          <Route
+            path="/dashboard/pharmacy/post_data_pharmacy"
+            element={<PharmacyForm />}
+          />
+          <Route path="/dashboard/lab/post_data_lab" element={<LabForm />} />
         </Route>
       </Routes>
     </ThemeProvider>

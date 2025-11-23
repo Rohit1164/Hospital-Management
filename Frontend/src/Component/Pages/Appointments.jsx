@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Card from "../UI/Card.jsx";
 import { useTheme } from "../../Context/ThemeProvider.jsx";
+import { NavLink } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_APPOINTMENT;
 export default function Appointments() {
@@ -75,6 +76,25 @@ export default function Appointments() {
           </div>
         ))}
       </Card>
+      <button
+        className="
+      flex items-center gap-2 
+      bg-blue-600 hover:bg-blue-700 
+      text-white font-semibold 
+      px-4 py-2 rounded-lg 
+      shadow-md transition-all
+    "
+      >
+        <NavLink
+          key={"/post_data_appointments"}
+          to={"/dashboard/appointments/post_data_appointments"}
+        >
+          <span>
+            {/* <Pencil className="w-4 h-4" /> */}
+            Add Appointment
+          </span>
+        </NavLink>
+      </button>
     </div>
   );
 }

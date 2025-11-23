@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Table from "../UI/Table.jsx";
 import { useTheme } from "../../Context/ThemeProvider.jsx";
+import { Pencil } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 const BASE = import.meta.env.VITE_BASE_URL_DOCTOR;
 
@@ -54,43 +56,64 @@ export default function Doctors() {
   ];
 
   return (
-    <div
-      className={`min-h-screen p-6 rounded-2xl transition-colors duration-300 border ${
-        darkMode
-          ? "bg-gray-900 text-gray-100 border-gray-800"
-          : "bg-white text-gray-800 border-gray-200"
-      }`}
-    >
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold">Doctors</h2>
-        <p
-          className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}
-        >
-          Manage doctor information
-        </p>
-      </div>
-
-      {/* Loading */}
-      {loading && (
-        <p className="text-center py-4 text-lg font-medium">Loading...</p>
-      )}
-
-      {/* Error */}
-      {error && (
-        <p className="text-center py-4 text-red-500 font-medium">{error}</p>
-      )}
-
-      {/* Table */}
-      {!loading && !error && (
-        <div
-          className={`rounded-lg shadow-md overflow-hidden transition-all duration-300 ${
-            darkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50"
-          }`}
-        >
-          <Table columns={columns} data={doctors} darkMode={darkMode} />
+    <>
+      <div
+        className={`min-h-screen p-6 rounded-2xl transition-colors duration-300 border ${
+          darkMode
+            ? "bg-gray-900 text-gray-100 border-gray-800"
+            : "bg-white text-gray-800 border-gray-200"
+        }`}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-semibold">Doctors</h2>
+          <p
+            className={`text-sm ${
+              darkMode ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
+            Manage doctor information
+          </p>
         </div>
-      )}
-    </div>
+
+        {/* Loading */}
+        {loading && (
+          <p className="text-center py-4 text-lg font-medium">Loading...</p>
+        )}
+
+        {/* Error */}
+        {error && (
+          <p className="text-center py-4 text-red-500 font-medium">{error}</p>
+        )}
+        {/* Table */}
+        {!loading && !error && (
+          <div
+            className={`rounded-lg shadow-md overflow-hidden transition-all duration-300 ${
+              darkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50"
+            }`}
+          >
+            <Table columns={columns} data={doctors} darkMode={darkMode} />
+          </div>
+        )}
+        <div className="flex justify-end items-center gap-3 mt-10 pr-10">
+          <button
+            className="
+      flex items-center gap-2 
+      bg-blue-600 hover:bg-blue-700 
+      text-white font-semibold 
+      px-4 py-2 rounded-lg 
+      shadow-md transition-all
+    "
+          >
+            <NavLink key={"post_data_doctor"} to={"post_data_doctor"}>
+              <span>
+                {/* <Pencil className="w-4 h-4" /> */}
+                Add Doctor
+              </span>
+            </NavLink>
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
