@@ -23,8 +23,7 @@ export default function Login() {
         { email, password },
         { withCredentials: true }
       );
-      const token = res.data.accessToken; // adapt if backend sends differently
-
+      const token = res.data.accessToken;
       login(token);
       navigate("/dashboard");
     } catch (err) {
@@ -67,7 +66,7 @@ export default function Login() {
             </label>
             <input
               type="email"
-              className="w-full px-4 py-3 rounded-lg bg-white/70 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg text-black  border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -81,7 +80,7 @@ export default function Login() {
             </label>
             <input
               type="password"
-              className="w-full px-4 py-3 rounded-lg bg-white/70 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg border text-black border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

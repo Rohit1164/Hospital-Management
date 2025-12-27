@@ -17,7 +17,7 @@ export default function BillForm({ initialData }) {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${BASE_URL}/bill`, {
+      const res = await fetch(`${BASE_URL}`, {
         method: initialData ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,6 +28,11 @@ export default function BillForm({ initialData }) {
       const data = await res.json();
       console.log("Saved:", data);
       alert("Bill saved successfully!");
+      setForm({
+        name: "",
+        amount: "",
+        status: "",
+      });
     } catch (error) {
       console.error(error);
       alert("Something went wrong");

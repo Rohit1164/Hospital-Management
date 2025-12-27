@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./Component/Pages/DashBoard.jsx";
 import Patients from "./Component/Pages/Patient.jsx";
@@ -18,7 +18,7 @@ import { ThemeProvider } from "./Context/ThemeProvider.jsx";
 export default function App() {
   const [toast, setToast] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const user = true; // simple auth flag for demo
+  const user = true;
 
   return (
     <ThemeProvider>

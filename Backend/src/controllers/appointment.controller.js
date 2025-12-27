@@ -12,10 +12,13 @@ export async function createAppointment(req, res) {
       status,
     });
 
+    await appointed.save();
+
     if (!appointed) {
       return res.status(400).json({ message: "Appointment creation failed" });
     }
     return res.status(201).json({
+      success: true,
       message: "Appointment created successfully",
       data: appointed,
     });

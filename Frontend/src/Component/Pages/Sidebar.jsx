@@ -13,9 +13,18 @@ import { useTheme } from "../../Context/ThemeProvider";
 
 export default function Sidebar({ open = true }) {
   const { darkMode } = useTheme();
+
   const links = [
-    { to: "/", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
-    { to: "/dashboard/patients", label: "Patients", icon: <Users size={18} /> },
+    {
+      to: "/dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard size={18} />,
+    },
+    {
+      to: "/dashboard/patient_dashboard",
+      label: "Patients",
+      icon: <Users size={18} />,
+    },
     {
       to: "/dashboard/doctors",
       label: "Doctors",
@@ -31,9 +40,21 @@ export default function Sidebar({ open = true }) {
       label: "Medical Records",
       icon: <FileText size={18} />,
     },
-    { to: "/dashboard/billing", label: "Billing", icon: <Receipt size={18} /> },
-    { to: "/dashboard/pharmacy", label: "Pharmacy", icon: <Pill size={18} /> },
-    { to: "/dashboard/labs", label: "Labs", icon: <FlaskConical size={18} /> },
+    {
+      to: "/dashboard/billing",
+      label: "Billing",
+      icon: <Receipt size={18} />,
+    },
+    {
+      to: "/dashboard/pharmacy",
+      label: "Pharmacy",
+      icon: <Pill size={18} />,
+    },
+    {
+      to: "/dashboard/labs",
+      label: "Labs",
+      icon: <FlaskConical size={18} />,
+    },
   ];
 
   return (
@@ -60,6 +81,7 @@ export default function Sidebar({ open = true }) {
           <NavLink
             key={to}
             to={to}
+            end={to === "/dashboard"}
             className={({ isActive }) =>
               `flex items-center gap-3 px-5 py-3 my-1 rounded-lg transition-colors ${
                 isActive

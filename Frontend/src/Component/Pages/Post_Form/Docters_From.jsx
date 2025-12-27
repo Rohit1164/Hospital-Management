@@ -9,10 +9,13 @@ import {
   Building2,
   IndianRupee,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_DOCTOR;
 
 export default function AddDoctorForm() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,25 +33,37 @@ export default function AddDoctorForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.qualification ||
+      formData.experienceInYears === ""
+    ) {
+      alert("Please fill all required fields");
+      return;
+    }
+
     const payload = {
       name: formData.name,
       email: formData.email,
       password: formData.password,
-      salary: Number(formData.salary),
+      salary: Number(formData.salary || 0),
       qualification: formData.qualification,
-      experienceInYears: Number(formData.experienceInYears),
+      experienceInYears: Number(formData.experienceInYears || 0),
       worksInHospitals: formData.worksInHospitals
-        ? formData.worksInHospitals.split(",")
+        ? formData.worksInHospitals.split(",").map((h) => h.trim())
         : [],
     };
 
     try {
-      const res = await axios.post(`${BASE_URL}`, payload);
+      const res = await axios.post(`${BASE_URL}/create`, payload);
       console.log("Doctor Added:", res.data);
       alert("Doctor added successfully");
+      navigate("/dashboard/doctors");
     } catch (err) {
-      console.error(err);
-      alert("Error adding doctor");
+      console.error("Backend error:", err.response?.data);
+      alert(err.response?.data?.message || "Error adding doctor");
     }
   };
 
@@ -69,8 +84,7 @@ export default function AddDoctorForm() {
               <User className="text-gray-500 mr-2" size={20} />
               <input
                 name="name"
-                placeholder="Dr. Rohit Sharma"
-                className="w-full bg-transparent outline-none text-black"
+                className="w-full bg-transparent outline-none"
                 onChange={handleChange}
               />
             </div>
@@ -83,8 +97,7 @@ export default function AddDoctorForm() {
               <Mail className="text-gray-500 mr-2" size={20} />
               <input
                 name="email"
-                placeholder="doctor@gmail.com"
-                className="w-full bg-transparent outline-none text-black"
+                className="w-full bg-transparent outline-none"
                 onChange={handleChange}
               />
             </div>
@@ -100,8 +113,7 @@ export default function AddDoctorForm() {
               <input
                 name="password"
                 type="password"
-                placeholder="Enter password"
-                className="w-full bg-transparent outline-none text-black"
+                className="w-full bg-transparent outline-none"
                 onChange={handleChange}
               />
             </div>
@@ -115,8 +127,7 @@ export default function AddDoctorForm() {
               <input
                 name="salary"
                 type="number"
-                placeholder="35000"
-                className="w-full bg-transparent outline-none text-black"
+                className="w-full bg-transparent outline-none"
                 onChange={handleChange}
               />
             </div>
@@ -131,8 +142,7 @@ export default function AddDoctorForm() {
               <GraduationCap className="text-gray-500 mr-2" size={20} />
               <input
                 name="qualification"
-                placeholder="MBBS, MD, etc."
-                className="w-full bg-transparent outline-none text-black"
+                className="w-full bg-transparent outline-none"
                 onChange={handleChange}
               />
             </div>
@@ -148,8 +158,7 @@ export default function AddDoctorForm() {
               <input
                 name="experienceInYears"
                 type="number"
-                placeholder="0"
-                className="w-full bg-transparent outline-none text-black"
+                className="w-full bg-transparent outline-none"
                 onChange={handleChange}
               />
             </div>
@@ -164,18 +173,15 @@ export default function AddDoctorForm() {
               <Building2 className="text-gray-500 mr-2" size={20} />
               <input
                 name="worksInHospitals"
-                placeholder="Apollo, AIIMS (comma separated)"
-                className="w-full bg-transparent outline-none text-black"
+                className="w-full bg-transparent outline-none"
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-lg text-lg font-semibold
-            hover:bg-blue-700 transition-all shadow-md hover:shadow-lg"
+            className="w-full bg-blue-600 text-white p-3 rounded-lg text-lg font-semibold hover:bg-blue-700"
           >
             Add Doctor
           </button>
