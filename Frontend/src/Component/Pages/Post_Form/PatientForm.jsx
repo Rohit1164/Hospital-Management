@@ -1,9 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
+import { useTheme } from "../../../Context/ThemeProvider";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_PATIENT;
 
 export default function PatientForm() {
+  const { darkMode } = useTheme();
+
   const [form, setForm] = useState({
     name: "",
     diagonsedwith: "",
@@ -21,7 +24,6 @@ export default function PatientForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ frontend validation
     if (
       !form.name ||
       !form.diagonsedwith ||
@@ -45,8 +47,7 @@ export default function PatientForm() {
     };
 
     try {
-      const res = await axios.post(BASE_URL, payload);
-      console.log("Patient Added:", res.data);
+      await axios.post(BASE_URL, payload);
       alert("Patient added successfully");
 
       setForm({
@@ -65,11 +66,19 @@ export default function PatientForm() {
   };
 
   return (
-    <div className="min-h-screen from-blue-50 to-blue-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Add Patient
-        </h2>
+    <div
+      className={`min-h-screen flex items-center justify-center p-6 transition-colors ${
+        darkMode ? "bg-gray-900 text-gray-100" : "bg-blue-50 text-gray-900"
+      }`}
+    >
+      <div
+        className={`w-full max-w-2xl rounded-2xl p-8 shadow-xl transition-colors ${
+          darkMode
+            ? "bg-gray-800 border border-gray-700"
+            : "bg-white border border-gray-200"
+        }`}
+      >
+        <h2 className="text-3xl font-bold text-center mb-6">Add Patient</h2>
 
         <form
           onSubmit={handleSubmit}
@@ -77,7 +86,7 @@ export default function PatientForm() {
         >
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium mb-1">
               Patient Name
             </label>
             <input
@@ -85,28 +94,34 @@ export default function PatientForm() {
               value={form.name}
               onChange={handleChange}
               placeholder="Rohit Kumar"
-              className="mt-1 w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-400 outline-none"
+              className={`w-full rounded-lg p-3 border outline-none ${
+                darkMode
+                  ? "bg-transparent border-gray-600 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  : "border-gray-300 focus:ring-2 focus:ring-blue-400"
+              }`}
             />
           </div>
 
           {/* Age */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Age
-            </label>
+            <label className="block text-sm font-medium mb-1">Age</label>
             <input
               type="number"
               name="age"
               value={form.age}
               onChange={handleChange}
               placeholder="25"
-              className="mt-1 w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-400 outline-none"
+              className={`w-full rounded-lg p-3 border outline-none ${
+                darkMode
+                  ? "bg-transparent border-gray-600 text-gray-100 focus:ring-2 focus:ring-blue-500"
+                  : "border-gray-300 focus:ring-2 focus:ring-blue-400"
+              }`}
             />
           </div>
 
           {/* Diagnosis */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium mb-1">
               Diagnosed With
             </label>
             <input
@@ -114,35 +129,45 @@ export default function PatientForm() {
               value={form.diagonsedwith}
               onChange={handleChange}
               placeholder="Fever / Diabetes / BP"
-              className="mt-1 w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-400 outline-none"
+              className={`w-full rounded-lg p-3 border outline-none ${
+                darkMode
+                  ? "bg-transparent border-gray-600 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  : "border-gray-300 focus:ring-2 focus:ring-blue-400"
+              }`}
             />
           </div>
 
           {/* Address */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Address
-            </label>
+            <label className="block text-sm font-medium mb-1">Address</label>
             <textarea
               name="address"
+              rows="2"
               value={form.address}
               onChange={handleChange}
-              rows="2"
               placeholder="Patient address"
-              className="mt-1 w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-400 outline-none"
+              className={`w-full rounded-lg p-3 border outline-none ${
+                darkMode
+                  ? "bg-transparent border-gray-600 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  : "border-gray-300 focus:ring-2 focus:ring-blue-400"
+              }`}
             />
           </div>
 
           {/* Blood Group */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium mb-1">
               Blood Group
             </label>
             <select
               name="bloodGroup"
               value={form.bloodGroup}
               onChange={handleChange}
-              className="mt-1 w-full border rounded-lg p-3 bg-white focus:ring-2 focus:ring-blue-400 outline-none"
+              className={`w-full rounded-lg p-3 border outline-none ${
+                darkMode
+                  ? "bg-gray-800 border-gray-600 text-gray-100 focus:ring-2 focus:ring-blue-500"
+                  : "bg-white border-gray-300 focus:ring-2 focus:ring-blue-400"
+              }`}
             >
               <option value="">Select Blood Group</option>
               <option>A+</option>
@@ -158,14 +183,16 @@ export default function PatientForm() {
 
           {/* Gender */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Gender
-            </label>
+            <label className="block text-sm font-medium mb-1">Gender</label>
             <select
               name="gender"
               value={form.gender}
               onChange={handleChange}
-              className="mt-1 w-full border rounded-lg p-3 bg-white focus:ring-2 focus:ring-blue-400 outline-none"
+              className={`w-full rounded-lg p-3 border outline-none ${
+                darkMode
+                  ? "bg-gray-800 border-gray-600 text-gray-100 focus:ring-2 focus:ring-blue-500"
+                  : "bg-white border-gray-300 focus:ring-2 focus:ring-blue-400"
+              }`}
             >
               <option value="">Select Gender</option>
               <option value="MALE">Male</option>
@@ -174,9 +201,9 @@ export default function PatientForm() {
             </select>
           </div>
 
-          {/* Hospital (Optional) */}
+          {/* Hospital */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium mb-1">
               Admitted In (Hospital ID – Optional)
             </label>
             <input
@@ -184,7 +211,11 @@ export default function PatientForm() {
               value={form.admittedIn}
               onChange={handleChange}
               placeholder="Hospital ObjectId"
-              className="mt-1 w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-400 outline-none"
+              className={`w-full rounded-lg p-3 border outline-none ${
+                darkMode
+                  ? "bg-transparent border-gray-600 text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                  : "border-gray-300 focus:ring-2 focus:ring-blue-400"
+              }`}
             />
           </div>
 
@@ -192,7 +223,11 @@ export default function PatientForm() {
           <div className="md:col-span-2">
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-xl text-lg font-semibold hover:bg-blue-700 transition"
+              className={`w-full py-3 rounded-xl text-lg font-semibold transition ${
+                darkMode
+                  ? "bg-blue-600 hover:bg-blue-500 text-white"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
+              }`}
             >
               Save Patient
             </button>

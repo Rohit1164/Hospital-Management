@@ -3,6 +3,7 @@ import Table from "../UI/Table.jsx";
 import { useTheme } from "../../Context/ThemeProvider.jsx";
 import { Pencil } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import Buttons from "./Buttons.jsx";
 
 const BASE = import.meta.env.VITE_BASE_URL_DOCTOR;
 
@@ -95,24 +96,9 @@ export default function Doctors() {
             <Table columns={columns} data={doctors} darkMode={darkMode} />
           </div>
         )}
-        <div className="flex justify-end items-center gap-3 mt-10 pr-10">
-          <button
-            className="
-      flex items-center gap-2 
-      bg-blue-600 hover:bg-blue-700 
-      text-white font-semibold 
-      px-4 py-2 rounded-lg 
-      shadow-md transition-all
-    "
-          >
-            <NavLink key={"post_data_doctor"} to={"post_data_doctor"}>
-              <span>
-                {/* <Pencil className="w-4 h-4" /> */}
-                Add Doctor
-              </span>
-            </NavLink>
-          </button>
-        </div>
+        <NavLink key={"post_data_doctor"} to={"post_data_doctor"}>
+          <Buttons>Add Doctors</Buttons>
+        </NavLink>
       </div>
     </>
   );

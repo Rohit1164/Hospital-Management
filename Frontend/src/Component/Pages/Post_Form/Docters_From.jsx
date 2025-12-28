@@ -10,10 +10,12 @@ import {
   IndianRupee,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../../Context/ThemeProvider";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_DOCTOR;
 
 export default function AddDoctorForm() {
+  const { darkMode } = useTheme();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -68,120 +70,96 @@ export default function AddDoctorForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-blue-100 p-6">
-      <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Add New Doctor
-        </h2>
+    <div
+      className={`min-h-screen flex items-center justify-center p-6 transition-colors ${
+        darkMode
+          ? "bg-linear-to-br from-gray-900 to-gray-800 text-gray-100"
+          : "bg-linear-to-br from-gray-50 to-gray-200 text-gray-900"
+      }`}
+    >
+      {/* CARD */}
+      <div
+        className={`w-full max-w-xl rounded-2xl shadow-xl p-8 border transition-colors ${
+          darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+        }`}
+      >
+        <h2 className="text-3xl font-bold text-center mb-6">Add New Doctor</h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <div className="flex items-center border rounded-lg p-2 mt-1 bg-gray-50">
-              <User className="text-gray-500 mr-2" size={20} />
-              <input
-                name="name"
-                className="w-full bg-transparent outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+          {/* INPUT TEMPLATE */}
+          {[
+            { label: "Full Name", name: "name", icon: User },
+            { label: "Email", name: "email", icon: Mail },
+            {
+              label: "Password",
+              name: "password",
+              icon: Lock,
+              type: "password",
+            },
+            {
+              label: "Salary",
+              name: "salary",
+              icon: IndianRupee,
+              type: "number",
+            },
+            {
+              label: "Qualification",
+              name: "qualification",
+              icon: GraduationCap,
+            },
+            {
+              label: "Experience (Years)",
+              name: "experienceInYears",
+              icon: Briefcase,
+              type: "number",
+            },
+            {
+              label: "Works in Hospitals",
+              name: "worksInHospitals",
+              icon: Building2,
+            },
+            // eslint-disable-next-line no-unused-vars
+          ].map(({ label, name, icon: Icon, type = "text" }) => (
+            <div key={name}>
+              <label
+                className={`text-sm font-medium ${
+                  darkMode ? "text-gray-300" : "text-gray-600"
+                }`}
+              >
+                {label}
+              </label>
 
-          {/* Email */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">Email</label>
-            <div className="flex items-center border rounded-lg p-2 mt-1 bg-gray-50">
-              <Mail className="text-gray-500 mr-2" size={20} />
-              <input
-                name="email"
-                className="w-full bg-transparent outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+              <div
+                className={`flex items-center border rounded-lg p-2 mt-1 transition-colors ${
+                  darkMode
+                    ? "bg-gray-700 border-gray-600"
+                    : "bg-gray-50 border-gray-300"
+                }`}
+              >
+                <Icon
+                  size={20}
+                  className={`mr-2 ${
+                    darkMode ? "text-gray-300" : "text-gray-500"
+                  }`}
+                />
 
-          {/* Password */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <div className="flex items-center border rounded-lg p-2 mt-1 bg-gray-50">
-              <Lock className="text-gray-500 mr-2" size={20} />
-              <input
-                name="password"
-                type="password"
-                className="w-full bg-transparent outline-none"
-                onChange={handleChange}
-              />
+                <input
+                  type={type}
+                  name={name}
+                  onChange={handleChange}
+                  className={`w-full bg-transparent outline-none ${
+                    darkMode
+                      ? "text-gray-100 placeholder-gray-400"
+                      : "text-gray-900 placeholder-gray-500"
+                  }`}
+                />
+              </div>
             </div>
-          </div>
-
-          {/* Salary */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">Salary</label>
-            <div className="flex items-center border rounded-lg p-2 mt-1 bg-gray-50">
-              <IndianRupee className="text-gray-500 mr-2" size={20} />
-              <input
-                name="salary"
-                type="number"
-                className="w-full bg-transparent outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Qualification */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Qualification
-            </label>
-            <div className="flex items-center border rounded-lg p-2 mt-1 bg-gray-50">
-              <GraduationCap className="text-gray-500 mr-2" size={20} />
-              <input
-                name="qualification"
-                className="w-full bg-transparent outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Experience */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Experience (Years)
-            </label>
-            <div className="flex items-center border rounded-lg p-2 mt-1 bg-gray-50">
-              <Briefcase className="text-gray-500 mr-2" size={20} />
-              <input
-                name="experienceInYears"
-                type="number"
-                className="w-full bg-transparent outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Works in Hospitals */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Works in Hospitals
-            </label>
-            <div className="flex items-center border rounded-lg p-2 mt-1 bg-gray-50">
-              <Building2 className="text-gray-500 mr-2" size={20} />
-              <input
-                name="worksInHospitals"
-                className="w-full bg-transparent outline-none"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+          ))}
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-lg text-lg font-semibold hover:bg-blue-700"
+            className="w-full bg-blue-600 text-white p-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
           >
             Add Doctor
           </button>

@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import { useTheme } from "../../../Context/ThemeProvider";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_LAB;
 const BASE_URL_DOCTOR = import.meta.env.VITE_BASE_URL_DOCTOR;
 const BASE_URL_PATIENT = import.meta.env.VITE_BASE_URL_PATIENT;
 
 export default function LabForm() {
+  const { darkMode } = useTheme();
+  const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [doctors, setDoctors] = useState([]);
 
@@ -20,24 +24,13 @@ export default function LabForm() {
     billingStatus: "",
   });
 
-  // ===============================
-  // FETCH PATIENTS & DOCTORS
-  // ===============================
   useEffect(() => {
     const fetchLists = async () => {
       try {
-        // Doctors
         const dRes = await fetch(BASE_URL_DOCTOR);
         const dJson = await dRes.json();
-        setDoctors(
-          Array.isArray(dJson)
-            ? dJson
-            : Array.isArray(dJson.data)
-            ? dJson.data
-            : []
-        );
+        setDoctors(Array.isArray(dJson) ? dJson : dJson.data || []);
 
-        // Patients
         const pRes = await fetch(BASE_URL_PATIENT);
         const pJson = await pRes.json();
         setPatients(
@@ -47,37 +40,30 @@ export default function LabForm() {
             ? pJson.patients
             : []
         );
+        navigate("/dashboard/labs");
       } catch (err) {
         console.error("Error fetching lists", err);
       }
     };
 
     fetchLists();
-  }, []);
+  }, [navigate]);
 
-  // ===============================
-  // HANDLE CHANGE
-  // ===============================
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ===============================
-  // SUBMIT
-  // ===============================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Frontend validation
     if (!form.patientId || !form.doctorId || !form.testName || !form.amount) {
       alert("Patient, Doctor, Test Name, and Amount are required");
       return;
     }
 
-    // Payload EXACTLY as schema expects
     const payload = {
-      patient: form.patientId, // ObjectId
-      doctor: form.doctorId, // ObjectId
+      patient: form.patientId,
+      doctor: form.doctorId,
       testName: form.testName,
       testDate: form.testDate,
       amount: Number(form.amount),
@@ -94,11 +80,9 @@ export default function LabForm() {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
-      console.log("Saved:", data);
+      await res.json();
       alert("Lab Test saved successfully");
 
-      // Reset
       setForm({
         patientId: "",
         doctorId: "",
@@ -110,6 +94,7 @@ export default function LabForm() {
         status: "",
         billingStatus: "",
       });
+      navigate("/dashboard/labs");
     } catch (error) {
       console.error(error);
       alert("Error submitting lab test");
@@ -117,8 +102,18 @@ export default function LabForm() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
-      <div className="w-full max-w-3xl bg-white shadow-2xl rounded-2xl p-6">
+    <div
+      className={`min-h-screen flex justify-center items-center p-6 transition-colors ${
+        darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-100 text-gray-900"
+      }`}
+    >
+      <div
+        className={`w-full max-w-3xl rounded-2xl p-6 shadow-2xl transition-colors ${
+          darkMode
+            ? "bg-gray-800 border border-gray-700"
+            : "bg-white border border-gray-200"
+        }`}
+      >
         <h1 className="text-2xl font-bold text-center mb-6">Lab Test Form</h1>
 
         <form
@@ -130,7 +125,11 @@ export default function LabForm() {
             name="patientId"
             value={form.patientId}
             onChange={handleChange}
-            className="p-3 rounded-xl border"
+            className={`p-3 rounded-xl border outline-none ${
+              darkMode
+                ? "bg-gray-800 border-gray-600 text-gray-100"
+                : "border-gray-300 text-gray-900"
+            }`}
           >
             <option value="">Select Patient</option>
             {patients.map((p) => (
@@ -145,7 +144,11 @@ export default function LabForm() {
             name="doctorId"
             value={form.doctorId}
             onChange={handleChange}
-            className="p-3 rounded-xl border"
+            className={`p-3 rounded-xl border outline-none ${
+              darkMode
+                ? "bg-gray-800 border-gray-600 text-gray-100"
+                : "border-gray-300 text-gray-900"
+            }`}
           >
             <option value="">Select Doctor</option>
             {doctors.map((d) => (
@@ -161,7 +164,11 @@ export default function LabForm() {
             placeholder="Test Name"
             value={form.testName}
             onChange={handleChange}
-            className="p-3 rounded-xl border"
+            className={`p-3 rounded-xl border outline-none ${
+              darkMode
+                ? "bg-transparent border-gray-600 text-gray-100 placeholder-gray-400"
+                : "border-gray-300 text-gray-900"
+            }`}
           />
 
           {/* Test Date */}
@@ -170,7 +177,11 @@ export default function LabForm() {
             name="testDate"
             value={form.testDate}
             onChange={handleChange}
-            className="p-3 rounded-xl border"
+            className={`p-3 rounded-xl border outline-none ${
+              darkMode
+                ? "bg-transparent border-gray-600 text-gray-100"
+                : "border-gray-300 text-gray-900"
+            }`}
           />
 
           {/* Amount */}
@@ -179,7 +190,11 @@ export default function LabForm() {
             placeholder="Amount"
             value={form.amount}
             onChange={handleChange}
-            className="p-3 rounded-xl border"
+            className={`p-3 rounded-xl border outline-none ${
+              darkMode
+                ? "bg-transparent border-gray-600 text-gray-100"
+                : "border-gray-300 text-gray-900"
+            }`}
           />
 
           {/* Result File */}
@@ -188,7 +203,11 @@ export default function LabForm() {
             placeholder="Result File URL"
             value={form.resultFile}
             onChange={handleChange}
-            className="p-3 rounded-xl border"
+            className={`p-3 rounded-xl border outline-none ${
+              darkMode
+                ? "bg-transparent border-gray-600 text-gray-100"
+                : "border-gray-300 text-gray-900"
+            }`}
           />
 
           {/* Summary */}
@@ -197,7 +216,11 @@ export default function LabForm() {
             placeholder="Report Summary"
             value={form.reportSummary}
             onChange={handleChange}
-            className="p-3 rounded-xl border md:col-span-2"
+            className={`p-3 rounded-xl border outline-none md:col-span-2 ${
+              darkMode
+                ? "bg-transparent border-gray-600 text-gray-100 placeholder-gray-400"
+                : "border-gray-300 text-gray-900"
+            }`}
           />
 
           {/* Status */}
@@ -205,7 +228,11 @@ export default function LabForm() {
             name="status"
             value={form.status}
             onChange={handleChange}
-            className="p-3 rounded-xl border"
+            className={`p-3 rounded-xl border outline-none ${
+              darkMode
+                ? "bg-gray-800 border-gray-600 text-gray-100"
+                : "border-gray-300 text-gray-900"
+            }`}
           >
             <option value="">Select Status</option>
             <option value="Pending">Pending</option>
@@ -218,7 +245,11 @@ export default function LabForm() {
             name="billingStatus"
             value={form.billingStatus}
             onChange={handleChange}
-            className="p-3 rounded-xl border"
+            className={`p-3 rounded-xl border outline-none ${
+              darkMode
+                ? "bg-gray-800 border-gray-600 text-gray-100"
+                : "border-gray-300 text-gray-900"
+            }`}
           >
             <option value="">Billing Status</option>
             <option value="Paid">Paid</option>
@@ -226,7 +257,14 @@ export default function LabForm() {
           </select>
 
           <div className="md:col-span-2 flex justify-center mt-4">
-            <button className="px-6 py-3 bg-blue-600 text-white rounded-xl text-lg">
+            <button
+              type="submit"
+              className={`px-6 py-3 rounded-xl text-lg font-semibold transition ${
+                darkMode
+                  ? "bg-blue-600 hover:bg-blue-500 text-white"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
+              }`}
+            >
               Submit
             </button>
           </div>

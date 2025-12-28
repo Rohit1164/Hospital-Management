@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useTheme } from "../../../Context/ThemeProvider";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL_APPOINTMENT;
 const BASE_URL_DOCTOR = import.meta.env.VITE_BASE_URL_DOCTOR;
 
 export default function AppointmentForm() {
+  const { darkMode } = useTheme();
   const [doctors, setDoctors] = useState([]);
   const [formData, setFormData] = useState({
     patientName: "",
@@ -77,16 +79,28 @@ export default function AppointmentForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-lg bg-white shadow-xl rounded-2xl p-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <div
+      className={`min-h-screen flex items-center justify-center p-6 ${
+        darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-100 text-gray-900"
+      }`}
+    >
+      <div
+        className={`w-full max-w-lg shadow-xl rounded-2xl p-8 border ${
+          darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+        }`}
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center">
           Appointment Form
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Patient Name */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
+            <label
+              className={`block font-medium mb-1 ${
+                darkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
               Patient Name
             </label>
             <input
@@ -94,19 +108,33 @@ export default function AppointmentForm() {
               name="patientName"
               value={formData.patientName}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`w-full p-3 rounded-lg outline-none border ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
+              }`}
             />
           </div>
 
           {/* Doctor */}
           <div>
-            <label className="text-sm font-medium">Doctor</label>
+            <label
+              className={`block font-medium mb-1 ${
+                darkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
+              Doctor
+            </label>
             <select
-              className="w-full rounded-lg border px-3 py-2"
               value={formData.doctorId}
               onChange={(e) =>
                 setFormData({ ...formData, doctorId: e.target.value })
               }
+              className={`w-full rounded-lg px-3 py-2 border outline-none ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
+              }`}
             >
               <option value="">Select doctor</option>
               {doctors.map((d) => (
@@ -115,14 +143,15 @@ export default function AppointmentForm() {
                 </option>
               ))}
             </select>
-            {/* {errors.doctorId && (
-              <p className="text-xs text-red-600">{errors.doctorId}</p>
-            )} */}
           </div>
 
           {/* Date */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
+            <label
+              className={`block font-medium mb-1 ${
+                darkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
               Appointment Date
             </label>
             <input
@@ -130,32 +159,54 @@ export default function AppointmentForm() {
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`w-full p-3 rounded-lg outline-none border ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
+              }`}
             />
           </div>
 
           {/* Time */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Time</label>
+            <label
+              className={`block font-medium mb-1 ${
+                darkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
+              Time
+            </label>
             <input
               type="time"
               name="time"
               value={formData.time}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`w-full p-3 rounded-lg outline-none border ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
+              }`}
             />
           </div>
 
           {/* Status */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
+            <label
+              className={`block font-medium mb-1 ${
+                darkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
               Status
             </label>
             <select
               name="status"
               value={formData.status}
               onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`w-full p-3 rounded-lg outline-none border ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
+              }`}
             >
               <option value="">Select Status</option>
               <option value="Scheduled">Scheduled</option>
@@ -164,7 +215,6 @@ export default function AppointmentForm() {
             </select>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium p-3 rounded-lg transition"

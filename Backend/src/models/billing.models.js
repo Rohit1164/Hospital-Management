@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 
 const billingSchema = new mongoose.Schema(
   {
-    name: { type: String, required: [true, "Patient name is required"] },
+    patientId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Patient",
+      required: true,
+    },
     amount: {
       type: Number,
       required: [true, "Amount is required"],
